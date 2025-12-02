@@ -24,4 +24,35 @@ cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUI
  && cmake --build build --config Release
 ```
 
+## All Build
+
+One Liner
+```bash
+cd complexNumberLib-static-shared
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=OFF
+ && cmake --build build --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber" --config Release
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=OFF
+ && cmake --build build --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber" --config Debug
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=ON
+ && cmake --build build --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber" --config Release
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=ON
+ && cmake --build build --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber" --config Debug
+
+ && cd .. && cd complexNumberLib-consumer
+
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Release
+ && cmake --build build --config Release
+
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Debug
+ && cmake --build build --config Debug
+```
+
 source: https://cfd.university/learn/automating-cfd-solver-and-library-compilation-using-cmake/how-to-compile-install-and-use-custom-libraries-with-cmake/
