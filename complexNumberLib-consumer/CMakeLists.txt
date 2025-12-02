@@ -33,65 +33,49 @@ if(WIN32)
   get_target_property(COMPLEX_LIB_TYPE complexNumbers::complexNumbers TYPE)
   
   if(COMPLEX_LIB_TYPE STREQUAL "SHARED_LIBRARY")
-    # Get the imported location of the library
-    get_target_property(IMPORTED_LOCATION_DEBUG complexNumbers::complexNumbers IMPORTED_LOCATION_DEBUG)
-    get_target_property(IMPORTED_LOCATION_RELEASE complexNumbers::complexNumbers IMPORTED_LOCATION_RELEASE)
-    get_target_property(IMPORTED_LOCATION_RELWITHDEBINFO complexNumbers::complexNumbers IMPORTED_LOCATION_RELWITHDEBINFO)
-    get_target_property(IMPORTED_LOCATION_MINSIZEREL complexNumbers::complexNumbers IMPORTED_LOCATION_MINSIZEREL)
+    # Get the imported location of the library - use the appropriate one based on configuration
+    # We'll use generator expressions to handle configuration-specific copying
     
-    # Get the DLL location from the imported library location
-    if(IMPORTED_LOCATION_DEBUG)
-      get_filename_component(DLL_DIR_DEBUG "${IMPORTED_LOCATION_DEBUG}" DIRECTORY)
-      set(DLL_PATH_DEBUG "${DLL_DIR_DEBUG}/complexNumbersd.dll")
-    endif()
+    # Get the imported location for the current configuration
+    get_target_property(IMPORTED_LOCATION complexNumbers::complexNumbers IMPORTED_LOCATION)
     
-    if(IMPORTED_LOCATION_RELEASE)
-      get_filename_component(DLL_DIR_RELEASE "${IMPORTED_LOCATION_RELEASE}" DIRECTORY)
-      set(DLL_PATH_RELEASE "${DLL_DIR_RELEASE}/complexNumbers.dll")
-    endif()
-    
-    if(IMPORTED_LOCATION_RELWITHDEBINFO)
-      get_filename_component(DLL_DIR_RELWITHDEBINFO "${IMPORTED_LOCATION_RELWITHDEBINFO}" DIRECTORY)
-      set(DLL_PATH_RELWITHDEBINFO "${DLL_DIR_RELWITHDEBINFO}/complexNumbers.dll")
-    endif()
-    
-    if(IMPORTED_LOCATION_MINSIZEREL)
-      get_filename_component(DLL_DIR_MINSIZEREL "${IMPORTED_LOCATION_MINSIZEREL}" DIRECTORY)
-      set(DLL_PATH_MINSIZEREL "${DLL_DIR_MINSIZEREL}/complexNumbers.dll")
-    endif()
-    
-    # Function to copy DLL for a specific configuration
-    function(copy_complex_dll config_name dll_path dll_name)
-      if(EXISTS "${dll_path}")
+    if(IMPORTED_LOCATION)
+      # Extract the directory from the imported location
+      get_filename_component(LIB_DIR "${IMPORTED_LOCATION}" DIRECTORY)
+      
+      # Use generator expressions to copy the appropriate DLL based on configuration
+      add_custom_command(
+        TARGET ${CMAKE_PROJECT_NAME}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<IF:$<CONFIG:Debug>,${LIB_DIR}/complexNumbersd.dll,${LIB_DIR}/complexNumbers.dll>"
+        "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
+        COMMENT "Copying complexNumbers DLL"
+      )
+      
+      # Debug message
+      message(STATUS "Will copy DLL from: ${LIB_DIR}")
+      message(STATUS "Debug DLL path: ${LIB_DIR}/complexNumbersd.dll")
+      message(STATUS "Release DLL path: ${LIB_DIR}/complexNumbers.dll")
+      
+    else()
+      # Try to get configuration-specific locations if IMPORTED_LOCATION is not set
+      get_target_property(IMPORTED_LOCATION_DEBUG complexNumbers::complexNumbers IMPORTED_LOCATION_DEBUG)
+      get_target_property(IMPORTED_LOCATION_RELEASE complexNumbers::complexNumbers IMPORTED_LOCATION_RELEASE)
+      
+      if(IMPORTED_LOCATION_DEBUG OR IMPORTED_LOCATION_RELEASE)
+        # Copy DLLs using configuration-specific logic with generator expressions
         add_custom_command(
           TARGET ${CMAKE_PROJECT_NAME}
           POST_BUILD
           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-          "${dll_path}"
-          "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/${dll_name}"
-          COMMENT "Copying ${dll_name} for ${config_name} configuration"
+          "$<IF:$<CONFIG:Debug>,$<IF:$<BOOL:${IMPORTED_LOCATION_DEBUG}>,${IMPORTED_LOCATION_DEBUG},>,${IMPORTED_LOCATION_RELEASE}>"
+          "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
+          COMMENT "Copying complexNumbers DLL"
         )
-        message(STATUS "Found ${dll_name} at ${dll_path}")
       else()
-        message(WARNING "${dll_name} not found at ${dll_path} for ${config_name} configuration")
+        message(WARNING "Could not determine DLL location for complexNumbers library")
       endif()
-    endfunction()
-    
-    # Copy DLLs for each configuration if they exist
-    if(DLL_PATH_DEBUG)
-      copy_complex_dll(Debug "${DLL_PATH_DEBUG}" "complexNumbersd.dll")
-    endif()
-    
-    if(DLL_PATH_RELEASE)
-      copy_complex_dll(Release "${DLL_PATH_RELEASE}" "complexNumbers.dll")
-    endif()
-    
-    if(DLL_PATH_RELWITHDEBINFO)
-      copy_complex_dll(RelWithDebInfo "${DLL_PATH_RELWITHDEBINFO}" "complexNumbers.dll")
-    endif()
-    
-    if(DLL_PATH_MINSIZEREL)
-      copy_complex_dll(MinSizeRel "${DLL_PATH_MINSIZEREL}" "complexNumbers.dll")
     endif()
     
   else()
