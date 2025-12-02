@@ -24,14 +24,14 @@ complexNumberLib/
 cd complexNumberLib-static-shared
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=ON
 cmake --build build --config Release
-cmake --install build --prefix "../generated_libs/complexNumber" --config Release
+cmake --install build --prefix "../generated_libs/complexNumber-cpp" --config Release
 ```
 
 ### Build the Consumer Application
 
 ```bash
 cd complexNumberLib-consumer
-cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Release
+cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-cpp" -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 
@@ -48,7 +48,7 @@ cmake --build build --config Release
 ```bash
 # One-liner to build all configurations
 cd complexNumberLib-static-shared
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=OFF && cmake --build build --config Release && cmake --install build --prefix "../generated_libs/complexNumber" --config Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=OFF && cmake --build build --config Release && cmake --install build --prefix "../generated_libs/complexNumber-cpp" --config Release
 # Repeat for other configurations as needed...
 ```
 
@@ -163,14 +163,14 @@ cd complexNumberLib-static-shared
 
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=ON
  && cmake --build build --config Release
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Release
 ```
 
 Debug type
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=ON
  && cmake --build build --config Debug
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Debug
 ```
 
 ### Consumer Build
@@ -178,7 +178,7 @@ cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=ON
 ```bash
 cd complexNumberLib-consumer
 
-cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Release
+cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-cpp" -DCMAKE_BUILD_TYPE=Release
  && cmake --build build --config Release
 ```
 
@@ -186,30 +186,59 @@ cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUI
 
 One Liner
 ```bash
-cd complexNumberLib-static-shared
+cd complexNumberLib-cpp
 
  && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=OFF
  && cmake --build build --config Release
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Release
 
  && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=OFF
  && cmake --build build --config Debug
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Debug
 
  && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=ON
  && cmake --build build --config Release
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Release
 
  && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=ON
  && cmake --build build --config Debug
- && cmake --install build --prefix "..\generated_libs\complexNumber" --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber-cpp" --config Debug
 
- && cd .. && cd complexNumberLib-consumer
+ && cd .. && cd complexNumberLib-consumer-cpp
 
- && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Release
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-cpp" -DCMAKE_BUILD_TYPE=Release
  && cmake --build build --config Release
 
- && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber" -DCMAKE_BUILD_TYPE=Debug
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-cpp" -DCMAKE_BUILD_TYPE=Debug
+ && cmake --build build --config Debug
+```
+
+One Liner
+```bash
+cd complexNumberLib-c
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=OFF
+ && cmake --build build --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber-c" --config Release
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=OFF
+ && cmake --build build --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber-c" --config Debug
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SHARED=ON
+ && cmake --build build --config Release
+ && cmake --install build --prefix "..\generated_libs\complexNumber-c" --config Release
+
+ && cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=ON
+ && cmake --build build --config Debug
+ && cmake --install build --prefix "..\generated_libs\complexNumber-c" --config Debug
+
+ && cd .. && cd complexNumberLib-consumer-c
+
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-c" -DCMAKE_BUILD_TYPE=Release
+ && cmake --build build --config Release
+
+ && cmake -B build -DCMAKE_PREFIX_PATH="../generated_libs/complexNumber-c" -DCMAKE_BUILD_TYPE=Debug
  && cmake --build build --config Debug
 ```
 
