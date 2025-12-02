@@ -1,6 +1,4 @@
-Here's the updated README with the reusable DLL copy script information:
-
-# ComplexNumberLib
+# cmake-install-custom-lib: ComplexNumberLib
 
 A CMake-based C++ library project demonstrating how to create, install, and consume custom libraries with both static and shared library configurations.
 
