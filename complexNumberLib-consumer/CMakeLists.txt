@@ -33,14 +33,14 @@ if(WIN32)
       TARGET ${CMAKE_PROJECT_NAME}
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${CMAKE_PREFIX_PATH}/bin/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
+      "${CMAKE_SOURCE_DIR}/${CMAKE_PREFIX_PATH}/bin/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
       "${CMAKE_BINARY_DIR}/$<IF:$<CONFIG:Debug>,Debug,Release>/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
     )
     add_custom_command(
       TARGET ${CMAKE_PROJECT_NAME}
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${CMAKE_PREFIX_PATH}/bin/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
+      "${CMAKE_SOURCE_DIR}/${CMAKE_PREFIX_PATH}/bin/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
       "${CMAKE_BINARY_DIR}/$<IF:$<CONFIG:Debug>,complexNumbersd.dll,complexNumbers.dll>"
     )
   endif()
